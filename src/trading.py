@@ -148,9 +148,9 @@ def live_trade_loop(symbol, timeframe, base_amount, window=500, poll_seconds=60)
                     bb_lower = df["BB_Lower"].iloc[-1]
                     if pd.notna(bb_upper) and pd.notna(bb_lower) and last_price > 0:
                         spread = (bb_upper - bb_lower) / last_price
-                        if spread < 0.03:
+                        if spread < 0.025:
                             console.print(
-                                f"[yellow][bold]st[/bold] [white]► Skipping Buy: BB Spread {spread*100:.2f}% < 3% threshold"
+                                f"[yellow][bold]st[/bold] [white]► Skipping Buy: BB Spread {spread*100:.2f}% < 2.5% threshold"
                             )
                             logger.info(f"{symbol} SKIP BUY: Spread too small ({spread:.4f})")
                             can_buy = False
@@ -168,7 +168,7 @@ def live_trade_loop(symbol, timeframe, base_amount, window=500, poll_seconds=60)
             # 3) SELL
             elif position == 1 and last_signal == 0:
                 pnl_pct = (last_price - entry_price) / entry_price if entry_price else 0.0
-                min_profit = 0.025
+                min_profit = 0.02
 
                 if pnl_pct > min_profit:
                     console.print(
